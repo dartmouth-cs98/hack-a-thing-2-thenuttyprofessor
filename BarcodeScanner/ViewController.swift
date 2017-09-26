@@ -128,7 +128,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             let barcode_number = scan.stringValue
             var itemName = "Sorry, could not find this object"
             
-            print(barcode_number as Any)
+//            print(barcode_number as Any)
             
 //            let baseApi = "http://api.upcdatabase.org/json/a3d445a016d7c34a61b83ff1594ab361/"
             let baseApi = "http://api.walmartlabs.com/v1/items?apiKey=638zffcrmt5gnm994msryvas&upc="
@@ -137,7 +137,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             
             let tempUrl = baseApi + walmartSubstring
             
-            print("TEMP URL", tempUrl)
+//            print("TEMP URL", tempUrl)
         
             
             let urlString = URL(string: tempUrl)
@@ -152,24 +152,26 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                             
                             let json = try? JSONSerialization.jsonObject(with: data!, options: [])
                             
-                            if let jsonDict = json as? [String: Any] {
-                                print("DICT", jsonDict)
-                                if jsonDict["name"] != nil {
-                                    itemName = (jsonDict["name"] as? String)!
-                                    print(itemName)
+                            if let jsonDict = json as? [String: [Any]] {
+//                                print("DICT", jsonDict)
+                                if let items = jsonDict["items"] as? [[String:Any]], !items.isEmpty {
+                                    itemName = items[0]["name"]! as! String
+//                                    print("ITEM", itemName)
                                 }
                             }
                         }
                     }
+                                        
+                    let alertMessage = "Barcode Number: " + barcode_number! + "\n" + itemName
+                    let alertController = UIAlertController(title: "Barcode Scanned", message: alertMessage, preferredStyle: .alert)
+                    
+                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler:nil))
+                    
+                    self.present(alertController, animated: true, completion: nil)
+                    
                 }
-                task.resume()
                 
-                let alertMessage = "Barcode Number: " + barcode_number! + "\n" + itemName
-            let alertController = UIAlertController(title: "Barcode Scanned", message: alertMessage, preferredStyle: .alert)
-            
-            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler:nil))
-            
-            present(alertController, animated: true, completion: nil)
+            task.resume()
         }
     }
     }}
