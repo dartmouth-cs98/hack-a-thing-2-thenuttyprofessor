@@ -8,3 +8,12 @@ We mostly worked together on this app, but Ross took the lead during the initial
 
 It has a bug where the barcode gets scanned and the alert comes up before the api call gets processed so you have to scan items twice for them to work.
 Overall it was a pretty cool project that we would potentially be interested in extending in the future.
+
+
+-----
+
+Citation:
+
+We used the tutorial located at https://gkbrown.org/2016/11/11/building-a-simple-barcode-scanner-in-ios/ as the basis of our hack-a-thing. Neither of us have ever built an iOS application and the tutorial exposed us to the dev environment, swift, APIs, among other things! :)
+
+We used stackoverflow to learn how to parse JSON
