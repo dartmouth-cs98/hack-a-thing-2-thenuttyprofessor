@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  BarcodeScanner
 //
-//  Created by Ross Bower on 9/25/17.
-//  Copyright © 2017 Ross Bower. All rights reserved.
+//  Created by Ross Bower adn Kyra Maxwell on 9/25/17.
+//  Copyright © 2017 Ross Bower and Kyra Maxwell. All rights reserved.
 //
 
 import UIKit

@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  BarcodeScanner
 //
-//  Created by Ross Bower on 9/25/17.
-//  Copyright © 2017 Ross Bower. All rights reserved.
+//  Created by Ross Bower and Kyra Mawell on 9/25/17.
+//  Copyright © 2017 Ross Bower and Kyra Maxwell. All rights reserved.
 //
 
 import UIKit
@@ -126,8 +126,22 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         if (metadataObjects.count > 0 && metadataObjects.first is AVMetadataMachineReadableCodeObject) {
             let scan = metadataObjects.first as! AVMetadataMachineReadableCodeObject
             let barcode_number = scan.stringValue
-
-            let urlString = URL(string: "http://api.upcdatabase.org/json/a3d445a016d7c34a61b83ff1594ab361/0111222333446") //need to put our barcode number in the last field
+            var itemName = "Sorry, could not find this object"
+            
+            print(barcode_number as Any)
+            
+//            let baseApi = "http://api.upcdatabase.org/json/a3d445a016d7c34a61b83ff1594ab361/"
+            let baseApi = "http://api.walmartlabs.com/v1/items?apiKey=638zffcrmt5gnm994msryvas&upc="
+            
+            let walmartSubstring = String(describing: barcode_number!.dropFirst()) //Only 12 digits
+            
+            let tempUrl = baseApi + walmartSubstring
+            
+            print("TEMP URL", tempUrl)
+        
+            
+            let urlString = URL(string: tempUrl)
+            
             if let url = urlString {
                 let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
                     if error != nil {
@@ -137,15 +151,21 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                             //print(usableData)
                             
                             let json = try? JSONSerialization.jsonObject(with: data!, options: [])
-
-                            print("THIS IS JSON", json) //Prints json to console
+                            
+                            if let jsonDict = json as? [String: Any] {
+                                print("DICT", jsonDict)
+                                if jsonDict["name"] != nil {
+                                    itemName = (jsonDict["name"] as? String)!
+                                    print(itemName)
+                                }
+                            }
                         }
                     }
                 }
                 task.resume()
                 
-            // need to extract the item name and display it in message
-            let alertController = UIAlertController(title: "Barcode Scanned", message: barcode_number, preferredStyle: .alert)
+                let alertMessage = "Barcode Number: " + barcode_number! + "\n" + itemName
+            let alertController = UIAlertController(title: "Barcode Scanned", message: alertMessage, preferredStyle: .alert)
             
             alertController.addAction(UIAlertAction(title: "OK", style: .default, handler:nil))
             
