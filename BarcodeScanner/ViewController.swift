@@ -157,17 +157,18 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                                 if let items = jsonDict["items"] as? [[String:Any]], !items.isEmpty {
                                     itemName = items[0]["name"]! as! String
 //                                    print("ITEM", itemName)
+
                                 }
+                                
+                                let alertMessage = "Barcode Number: " + barcode_number! + "\n" + itemName
+                                let alertController = UIAlertController(title: "Barcode Scanned", message: alertMessage, preferredStyle: .alert)
+                                
+                                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler:nil))
+                                
+                                self.present(alertController, animated: true, completion: nil)
                             }
                         }
                     }
-                                        
-                    let alertMessage = "Barcode Number: " + barcode_number! + "\n" + itemName
-                    let alertController = UIAlertController(title: "Barcode Scanned", message: alertMessage, preferredStyle: .alert)
-                    
-                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler:nil))
-                    
-                    self.present(alertController, animated: true, completion: nil)
                     
                 }
                 
